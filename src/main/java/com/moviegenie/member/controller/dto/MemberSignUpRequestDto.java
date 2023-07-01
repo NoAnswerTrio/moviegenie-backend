@@ -2,6 +2,7 @@ package com.moviegenie.member.controller.dto;
 
 
 import com.moviegenie.member.domain.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Getter
+@AllArgsConstructor
 public class MemberSignUpRequestDto {
 
     @NotBlank
