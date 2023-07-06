@@ -1,8 +1,10 @@
 package com.moviegenie.member.controller;
 
+import com.moviegenie.member.controller.dto.MemberLoginDto;
 import com.moviegenie.member.controller.dto.MemberSignUpRequestDto;
 import com.moviegenie.member.controller.dto.MemberSignUpResponseDto;
 import com.moviegenie.member.domain.entity.Member;
+import com.moviegenie.member.service.LoginService;
 import com.moviegenie.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +23,10 @@ import java.util.Iterator;
 public class MemberController {
 
     private final MemberService memberService;
+    private final LoginService loginService;
 
     @PostMapping("sign-up")
-    public MemberSignUpResponseDto signUp(HttpServletRequest request, @RequestBody @Valid MemberSignUpRequestDto dto) {
+    public ResponseEntity<MemberSignUpResponseDto> signUp(HttpServletRequest request, @RequestBody @Valid MemberSignUpRequestDto dto) {
 
         Member member = MemberSignUpRequestDto.toEntity(dto);
 
@@ -36,6 +39,23 @@ public class MemberController {
             log.info(nextHeader + " : " + request.getHeader(nextHeader));
         }
 
-        return MemberSignUpResponseDto.toDto(member);
+        return ResponseEntity.ok(MemberSignUpResponseDto.toDto(member));
+    }
+
+    @GetMapping("duplicated/{email}")
+    public ResponseEntity<?> isDuplicatedEmail(@PathVariable String email) {
+        boolean duplicatedEmail = memberService.isDuplicatedEmail(email);
+
+        if (duplicatedEmail) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<?> login(@RequestBody MemberLoginDto dto) {
+        boolean login = loginService.login(dto.getEmail(), dto.getPassword());
+        if (login) return ResponseEntity.ok().build();
+        else return  ResponseEntity.notFound().build();
     }
 }
