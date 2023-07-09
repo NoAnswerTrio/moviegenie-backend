@@ -1,32 +1,20 @@
 package com.moviegenie.member.service;
 
-import com.moviegenie.member.domain.MemberRepository;
-import com.moviegenie.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import javax.servlet.http.HttpSession;
 
 @Service
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final MemberRepository memberRepository;
-    public boolean login(String email, String password) {
-
-        boolean existsByEmail = memberRepository.existsByEmail(email);
-
-        if (existsByEmail) {
-            String memberPassword = isExistEmail(email);
-            if (memberPassword.equals(password)) {
-                return true;
-            }
-        }
-        return false;
+    private final HttpSession httpSession;
+    public static final String MEMBER_ID = "member_id";
+    public void login(Long id) {
+        httpSession.setAttribute(MEMBER_ID, id);
     }
-
-    private String isExistEmail(String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
-        return member.get().getPassword();
+    public void logout() {
+        httpSession.removeAttribute(MEMBER_ID);
     }
 }
