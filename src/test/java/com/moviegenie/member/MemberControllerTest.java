@@ -3,6 +3,7 @@ package com.moviegenie.member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moviegenie.member.controller.MemberController;
+import com.moviegenie.member.controller.dto.MemberLoginDto;
 import com.moviegenie.member.controller.dto.MemberSignUpRequestDto;
 import com.moviegenie.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,7 @@ public class MemberControllerTest {
                         .post("/api/member/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                        .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
 }
