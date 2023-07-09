@@ -1,5 +1,6 @@
 package com.moviegenie.member;
 
+import com.moviegenie.fixture.MemberEntityFixture;
 import com.moviegenie.member.domain.MemberRepository;
 import com.moviegenie.member.domain.entity.Member;
 import com.moviegenie.member.service.MemberService;
@@ -24,13 +25,11 @@ class MemberServiceTest {
     @Test
     void givenValidMemberDto_whenSignUp_thenSaveMember() {
 
-        Member validMember = createMember("test@email", "12345678");
+        Member validMember = MemberEntityFixture.create("test@email", "12345678");
 
         memberService.signUp(validMember);
 
         verify(memberRepository, times(1)).save(validMember);
     }
-    private Member createMember(String email, String password) {
-        return new Member(email, password);
-    }
+
 }
