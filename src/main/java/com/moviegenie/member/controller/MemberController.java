@@ -3,6 +3,7 @@ package com.moviegenie.member.controller;
 import com.moviegenie.member.controller.dto.MemberLoginDto;
 import com.moviegenie.member.controller.dto.MemberSignUpRequestDto;
 import com.moviegenie.member.controller.dto.MemberSignUpResponseDto;
+import com.moviegenie.member.domain.MemberRepository;
 import com.moviegenie.member.domain.entity.Member;
 import com.moviegenie.member.service.LoginService;
 import com.moviegenie.member.service.MemberService;
@@ -23,6 +24,7 @@ import java.util.Iterator;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final LoginService loginService;
 
     @PostMapping("sign-up")
@@ -54,8 +56,18 @@ public class MemberController {
 
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody MemberLoginDto dto) {
-        boolean login = loginService.login(dto.getEmail(), dto.getPassword());
-        if (login) return ResponseEntity.ok().build();
-        else return  ResponseEntity.notFound().build();
+        boolean isValidLoginInfo = memberService.isValidLoginInfo(dto);
+
+        if (isValidLoginInfo) {
+            loginService.login(memberRepository.findByEmail(dto.getEmail()).get().getId());
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout() {
+        loginService.logout();
+        return ResponseEntity.ok().build();
     }
 }
