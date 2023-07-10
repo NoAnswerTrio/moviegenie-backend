@@ -1,11 +1,9 @@
 package com.moviegenie.member;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moviegenie.member.controller.MemberController;
-import com.moviegenie.member.controller.dto.MemberLoginDto;
 import com.moviegenie.member.controller.dto.MemberSignUpRequestDto;
-import com.moviegenie.member.service.MemberService;
+import com.moviegenie.member.service.GeneralMemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ public class MemberControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private MemberService memberService;
+    private GeneralMemberService memberService;
 
     @DisplayName("회원 가입 컨트롤러 테스트")
     @Test

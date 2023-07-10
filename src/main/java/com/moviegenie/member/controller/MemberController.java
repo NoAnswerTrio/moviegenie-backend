@@ -5,8 +5,8 @@ import com.moviegenie.member.controller.dto.MemberSignUpRequestDto;
 import com.moviegenie.member.controller.dto.MemberSignUpResponseDto;
 import com.moviegenie.member.domain.MemberRepository;
 import com.moviegenie.member.domain.entity.Member;
-import com.moviegenie.member.service.LoginService;
-import com.moviegenie.member.service.MemberService;
+import com.moviegenie.member.service.SessionLoginService;
+import com.moviegenie.member.service.GeneralMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +23,9 @@ import java.util.Iterator;
 @RestController
 public class MemberController {
 
-    private final MemberService memberService;
+    private final GeneralMemberService memberService;
     private final MemberRepository memberRepository;
-    private final LoginService loginService;
+    private final SessionLoginService loginService;
 
     @PostMapping("sign-up")
     public ResponseEntity<MemberSignUpResponseDto> signUp(HttpServletRequest request, @RequestBody @Valid MemberSignUpRequestDto dto) {

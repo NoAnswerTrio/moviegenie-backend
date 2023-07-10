@@ -1,35 +1,13 @@
 package com.moviegenie.member.service;
 
 import com.moviegenie.member.controller.dto.MemberLoginDto;
-import com.moviegenie.member.domain.MemberRepository;
 import com.moviegenie.member.domain.entity.Member;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+public interface MemberService {
 
-@Service
-@RequiredArgsConstructor
-public class MemberService {
+    void signUp(Member member);
 
-    private final MemberRepository memberRepository;
-    public void signUp(Member member) {
-        memberRepository.save(member);
-    }
+    boolean isDuplicatedEmail(String email);
 
-    public boolean isDuplicatedEmail(String email) {
-        return memberRepository.existsByEmail(email);
-    }
-
-    public boolean isValidLoginInfo(MemberLoginDto loginDto) {
-        Optional<Member> loginMember = memberRepository.findByEmail(loginDto.getEmail());
-
-        if (loginMember.isPresent()) {
-            if (loginMember.get().getPassword().equals(loginDto.getPassword())) {
-                return true;
-            }
-        }
-        return false;
-    }
+    boolean isValidLoginInfo(MemberLoginDto loginDto);
 }

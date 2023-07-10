@@ -3,7 +3,7 @@ package com.moviegenie.member;
 import com.moviegenie.fixture.MemberEntityFixture;
 import com.moviegenie.member.domain.MemberRepository;
 import com.moviegenie.member.domain.entity.Member;
-import com.moviegenie.member.service.MemberService;
+import com.moviegenie.member.service.GeneralMemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
     @InjectMocks
-    private MemberService memberService;
+    private GeneralMemberService memberService;
     @Mock
     private MemberRepository memberRepository;
 
