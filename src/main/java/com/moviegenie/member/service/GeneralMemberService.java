@@ -1,12 +1,12 @@
 package com.moviegenie.member.service;
 
-import com.moviegenie.member.controller.dto.MemberLoginDto;
+import com.moviegenie.exception.ErrorCode;
+import com.moviegenie.exception.MovieGenieAppException;
+import com.moviegenie.member.controller.dto.MemberLoginRequestDto;
 import com.moviegenie.member.domain.MemberRepository;
 import com.moviegenie.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,22 +15,25 @@ public class GeneralMemberService implements MemberService{
     private final MemberRepository memberRepository;
     @Override
     public void signUp(Member member) {
+        memberRepository.findByEmail(member.getEmail()).ifPresent(e -> {
+            throw new MovieGenieAppException(ErrorCode.DUPLICATED_EMAIL);
+        });
+
         memberRepository.save(member);
     }
 
     @Override
-    public boolean isDuplicatedEmail(String email) {
-        return memberRepository.existsByEmail(email);
+    public void isDuplicatedEmail(String email) {
+        if (memberRepository.existsByEmail(email)) throw new MovieGenieAppException(ErrorCode.DUPLICATED_EMAIL);
     }
     @Override
-    public boolean isValidLoginInfo(MemberLoginDto loginDto) {
-        Optional<Member> loginMember = memberRepository.findByEmail(loginDto.getEmail());
+    public void isValidLoginInfo(MemberLoginRequestDto loginDto) {
+        String loginEmail = loginDto.getEmail();
+        String loginDtoPassword = loginDto.getPassword();
 
-        if (loginMember.isPresent()) {
-            if (loginMember.get().getPassword().equals(loginDto.getPassword())) {
-                return true;
-            }
-        }
-        return false;
+        Member member = memberRepository.findByEmail(loginEmail).orElseThrow(
+                () -> new MovieGenieAppException(ErrorCode.MEMBER_EMAIL_NOT_FOUND));
+
+        if (!member.getPassword().equals(loginDtoPassword)) throw new MovieGenieAppException(ErrorCode.MEMBER_PASSWORD_NOT_FOUND);
     }
 }

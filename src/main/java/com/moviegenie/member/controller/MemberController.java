@@ -1,6 +1,8 @@
 package com.moviegenie.member.controller;
 
-import com.moviegenie.member.controller.dto.MemberLoginDto;
+import com.moviegenie.common.response.Response;
+import com.moviegenie.member.controller.dto.MemberLoginRequestDto;
+import com.moviegenie.member.controller.dto.MemberLoginResponseDto;
 import com.moviegenie.member.controller.dto.MemberSignUpRequestDto;
 import com.moviegenie.member.controller.dto.MemberSignUpResponseDto;
 import com.moviegenie.member.domain.MemberRepository;
@@ -9,7 +11,6 @@ import com.moviegenie.member.service.SessionLoginService;
 import com.moviegenie.member.service.GeneralMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class MemberController {
     private final SessionLoginService loginService;
 
     @PostMapping("sign-up")
-    public ResponseEntity<MemberSignUpResponseDto> signUp(HttpServletRequest request, @RequestBody @Valid MemberSignUpRequestDto dto) {
+    public Response<MemberSignUpResponseDto> signUp(HttpServletRequest request, @RequestBody @Valid MemberSignUpRequestDto dto) {
 
         Member member = MemberSignUpRequestDto.toEntity(dto);
 
@@ -41,33 +42,24 @@ public class MemberController {
             log.info(nextHeader + " : " + request.getHeader(nextHeader));
         }
 
-        return ResponseEntity.ok(MemberSignUpResponseDto.toDto(member));
+        return Response.success(MemberSignUpResponseDto.toDto(member));
     }
 
     @GetMapping("duplicated/{email}")
-    public ResponseEntity<?> isDuplicatedEmail(@PathVariable String email) {
-        boolean duplicatedEmail = memberService.isDuplicatedEmail(email);
-
-        if (duplicatedEmail) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
+    public Response<Void> isDuplicatedEmail(@PathVariable String email) {
+        memberService.isDuplicatedEmail(email);
+        return Response.success();
     }
 
     @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody MemberLoginDto dto) {
-        boolean isValidLoginInfo = memberService.isValidLoginInfo(dto);
-
-        if (isValidLoginInfo) {
-            loginService.login(memberRepository.findByEmail(dto.getEmail()).get().getId());
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+    public Response<MemberLoginResponseDto> login(@RequestBody MemberLoginRequestDto dto) {
+        memberService.isValidLoginInfo(dto);
+        return Response.success(MemberLoginResponseDto.toDto(dto));
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<?> logout() {
+    public Response<Void> logout() {
         loginService.logout();
-        return ResponseEntity.ok().build();
+        return Response.success();
     }
 }
