@@ -1,0 +1,1 @@
+insert into member (email, password) values ('admin@admin' , '12345678');
