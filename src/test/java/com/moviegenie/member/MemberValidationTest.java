@@ -1,11 +1,9 @@
 package com.moviegenie.member;
 
 import com.moviegenie.member.controller.dto.MemberSignUpRequestDto;
-import net.bytebuddy.pool.TypePool;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.validation.ConstraintViolation;

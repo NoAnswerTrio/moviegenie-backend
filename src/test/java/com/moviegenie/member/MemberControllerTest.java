@@ -1,32 +1,21 @@
 package com.moviegenie.member;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moviegenie.MoviegenieApplication;
-import com.moviegenie.exception.ErrorCode;
-import com.moviegenie.exception.MovieGenieAppException;
-import com.moviegenie.fixture.MemberEntityFixture;
 import com.moviegenie.member.controller.MemberController;
 import com.moviegenie.member.controller.dto.MemberSignUpRequestDto;
 import com.moviegenie.member.domain.MemberRepository;
-import com.moviegenie.member.domain.entity.Member;
 import com.moviegenie.member.service.GeneralMemberService;
 import com.moviegenie.member.service.SessionLoginService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
